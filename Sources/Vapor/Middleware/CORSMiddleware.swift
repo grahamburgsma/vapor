@@ -139,7 +139,8 @@ public final class CORSMiddleware: Middleware {
             // Modify response headers based on CORS settings
             let originBasedAccessControlAllowHeader = self.configuration.allowedOrigin.header(forRequest: request)
             response.responseBox.withLockedValue { box in
-                box.headers.replaceOrAdd(name: .accessControlAllowOrigin, value: originBasedAccessControlAllowHeader)
+                guard !originBasedAccessControlAllowHeader.isEmpty else { return }
+
                 box.headers.replaceOrAdd(name: .accessControlAllowHeaders, value: self.configuration.allowedHeaders)
                 box.headers.replaceOrAdd(name: .accessControlAllowMethods, value: self.configuration.allowedMethods)
                 
